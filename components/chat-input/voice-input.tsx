@@ -27,7 +27,7 @@ export function VoiceInput() {
   const touchStartY = useRef<number | null>(null);
   const touchMoveHandler = useRef<((e: TouchEvent) => void) | null>(null);
   const touchEndHandler = useRef<((e: TouchEvent) => void) | null>(null);
-
+  const reason = useRef<"send"|"cancel">("send")
   // Clean up resources
   useEffect(() => {
     return () => {
@@ -68,7 +68,7 @@ export function VoiceInput() {
   const stopRecording = useCallback((e: React.MouseEvent | React.TouchEvent | TouchEvent) => {
     e.preventDefault();
     removeDocumentListeners();
-
+    reason.current = 'send';
     if (mediaRecorder.current?.state === "recording") {
       mediaRecorder.current.stop();
       setIsRecording(false);
@@ -87,6 +87,7 @@ export function VoiceInput() {
     if (mediaRecorder.current?.state === "recording") {
       mediaRecorder.current.stop();
       audioChunks.current = [];
+      reason.current = 'cancel';
       setIsRecording(false);
     }
 
@@ -101,6 +102,7 @@ export function VoiceInput() {
   const startRecording = useCallback(async (e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault();
     e.stopPropagation()
+    reason.current="send"
     if (e.type === "touchstart") {
       const touch = (e as React.TouchEvent).touches[0];
       touchStartY.current = touch.clientY;
@@ -117,7 +119,8 @@ export function VoiceInput() {
     mediaRecorder.current = new MediaRecorder(mediaStream.current);
     mediaRecorder.current.ondataavailable = (e) => audioChunks.current.push(e.data);
     mediaRecorder.current.onstop = async () => {
-      if (recordingDuration > 0.5 && audioChunks.current.length > 0) {
+      console.log('reason.current',reason.current)
+      if (recordingDuration > 0.5 && reason.current === 'send' &&  audioChunks.current.length > 0) {
         setIsProcessing(true);
         try {
           const audioBlob = new Blob(audioChunks.current, { type: "audio/wav" });
@@ -169,10 +172,10 @@ export function VoiceInput() {
   }, [initializeMedia,  setIsProcessing, sttService, composerRuntime, setError, removeDocumentListeners, cancelRecording, stopRecording]);
 
   return (
-    <div className="flex w-1 flex-1 select-none h-full items-center justify-between">
+    <>
       <div
         className={cn(
-          "voice-recorder flex-1 text-center select-none rounded-md transition-colors",
+          "voice-recorder flex-1  h-full flex items-center w-1 justify-center text-center select-none rounded-md transition-colors",
           isRecording ? "text-destructive" : "text-muted-foreground",
           isProcessing && "opacity-50"
         )}
@@ -189,7 +192,7 @@ export function VoiceInput() {
             <span>转换中...</span>
           </div>
         ) : isRecording ? (
-          <div className="flex flex-row gap-1 items-center">
+          <>
             <div className="text-sm">
               <span className="hidden md:block">听写中... </span>
               {recordingDuration.toFixed(1)}s
@@ -198,14 +201,14 @@ export function VoiceInput() {
               <Waveform type="bars" className="mt-2 h-10" />
             </div>
             <div className="text-xs text-muted-foreground">向上滑动取消</div>
-          </div>
+          </>
         ) : (
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex items-center justify-center select-none gap-2">
             <Mic size={16} />
             <span>按住说话</span>
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }

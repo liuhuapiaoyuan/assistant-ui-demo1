@@ -50,8 +50,8 @@ export const Waveform = ({ type = "wave", className }: WaveformProps) => {
 
   // 默认波浪线类型
   return (
-    <div className={cn("wave", className)} aria-hidden="true">
-      <svg className="wave-svg" viewBox="0 0 200 30" preserveAspectRatio="none">
+    <div className={cn("wave select-none", className)} aria-hidden="true">
+      <svg className="wave-svg select-none" viewBox="0 0 200 30" preserveAspectRatio="none">
         <path
           className="wave-path"
           stroke="currentColor"
