@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer components {
+    /* 波形动画样式 */
+    .waveform-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      width: 100%;
+      margin-top: 8px;
+      position: relative;
+    }
+  
+    .waveform-bar {
+      width: 3px;
+      height: 3px;
+      background-color: currentColor;
+      border-radius: 1px;
+      margin: 0 2px;
+      animation: waveform 0.5s ease-in-out infinite alternate;
+      transform-origin: center;
+    }
+  
+    @keyframes waveform {
+      0% {
+        height: 3px;
+      }
+      100% {
+        height: 20px;
+      }
+    }
+  
+    /* 波浪线动画 */
+    .wave {
+      position: relative;
+      width: 100%;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  
+    .wave-svg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+  
+    .wave-path {
+      fill: none;
+      stroke-width: 2px;
+      stroke-linecap: round;
+      animation: wave-animation 1.5s ease-in-out infinite;
+    }
+  
+    @keyframes wave-animation {
+      0% {
+        stroke-dashoffset: 0;
+      }
+      50% {
+        stroke-dashoffset: -50;
+      }
+      100% {
+        stroke-dashoffset: -100;
+      }
+    }
+  
+    /* 脉冲动画 */
+    .pulse-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      width: 100%;
+      margin-top: 8px;
+    }
+  
+    .pulse-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(var(--destructive), 0.1);
+      position: relative;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+  
+    .pulse-inner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: rgb(var(--destructive));
+    }
+  
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(var(--destructive), 0.5);
+      }
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(var(--destructive), 0);
+      }
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(var(--destructive), 0);
+      }
+    }
+  }
