@@ -14,12 +14,22 @@ const sttService = async (audioBlob: Blob) => {
   // Return mock transcription
   return "这是一个模拟的语音转文字结果";
 };
-
+import {
+  CompositeAttachmentAdapter,
+  SimpleImageAttachmentAdapter,
+  SimpleTextAttachmentAdapter,
+} from "@assistant-ui/react";
+import { Demo } from "@/components/demo";
+ 
 export default function Home() {
   const runtime = useChatRuntime({
     api: "/api/chat/v2",
-
-    body: {},
+    adapters: {
+      attachments: new CompositeAttachmentAdapter([
+        new SimpleImageAttachmentAdapter(),
+        new SimpleTextAttachmentAdapter(),
+      ]),
+    }, 
   });
 
   return (
@@ -30,6 +40,7 @@ export default function Home() {
           <Thread />
           <WebSearchToolUI />
           <WeatherToolUI />
+          <Demo/>
         </main>
       </InputProvider>
     </AssistantRuntimeProvider>

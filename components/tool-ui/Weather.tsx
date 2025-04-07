@@ -9,7 +9,10 @@ WeatherArgs,
 WeatherResponse
 >({
   toolName: "weatherTool",
-  render: ({ args, result, status }) => {
+  render: ({ args, result, status,toolCallId }) => {
+    if(status.type==='complete' ){
+      console.log('result',toolCallId,"执行成功");
+    }
     return (
       <ToolCard
         toolName="天气工具"

@@ -20,7 +20,10 @@ import { VoiceInput } from "../chat-input/voice-input";
 
 import "../chat-input/index.css";
 import { useEffect, useRef } from "react";
-
+import {  
+  ComposerAddAttachment,
+} from "@/components/assistant-ui/attachment";
+ 
 
 export const ThreadInput = () => {
   const { error, setError, inputMode, setInputMode } = useInputContext();
@@ -52,7 +55,7 @@ export const ThreadInput = () => {
           <Mic size={18} className="transition-transform duration-200" /> : 
           <Type size={18} className="transition-transform duration-200" />}
       </button>
-
+          <ComposerAddAttachment/> 
       {inputMode === "text" ? (
         <ComposerPrimitive.Input ref={inputRef}
           rows={1}
