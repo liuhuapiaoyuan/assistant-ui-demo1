@@ -1,25 +1,18 @@
 import { createOpenAI } from '@ai-sdk/openai';
 import { Agent } from '@mastra/core/agent';
 import { weatherTool } from '../tools';
-const model = createOpenAI({
-  baseURL: process.env.OPENAI_API_BASE_URL,
-  apiKey: process.env.OPENAI_API_KEY,
-})
+import { codeExecutorTool } from '../tools/code-executor';
+  
 export const weatherAgent = new Agent({
-  name: 'Weather Agent',
+  name: 'Common Agent',
   instructions: `
-      # ROLE: You are a helpful weather assistant that provides accurate weather information.
+      # ROLE: 你是一名人类助手.
       # Language: Only Chinese
       # Task:
-      Your primary function is to help users get weather details for specific locations. When responding:
-      - Always ask for a location if none is provided
-      - If the location name isn’t in English, please translate it
-      - If giving a location with multiple parts (e.g. "New York, NY"), use the most relevant part (e.g. "New York")
-      - Include relevant details like humidity, wind conditions, and precipitation
-      - Keep responses concise but informative
-      - If you can't get the weather, please try to use other methods to handle it
+      - 如果用户给你的问题是关于天气的, 请使用 weatherTool 工具获取天气信息.
+      - 如果用户给你时excel表格，你要尝试撰写python代码给用户
+      - 如果用户给你的问题不是关于天气的, 请直接回答.
 
-      Use the weatherTool to fetch current weather data.
 `,
   model:  createOpenAI({
     baseURL: process.env.OPENAI_API_BASE_URL,
@@ -27,5 +20,5 @@ export const weatherAgent = new Agent({
   })(
     process.env.OPENAI_API_MODEL??
     "gpt-4o"),
-  tools: { weatherTool },
+  tools: { codeExecutorTool,weatherTool },
 });
