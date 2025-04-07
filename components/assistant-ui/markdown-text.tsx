@@ -35,16 +35,22 @@ const CodeHeader: FC<CodeHeaderProps> = ({ language, code }) => {
   };
 
   return (
-    <div className="flex items-center justify-between gap-4 rounded-t-lg bg-zinc-900 px-4 py-2 text-sm font-semibold text-white">
-      <span className="lowercase [&>span]:text-xs">{language}</span>
-      <TooltipIconButton tooltip="Copy" onClick={onCopy}>
-        {!isCopied && <CopyIcon />}
-        {isCopied && <CheckIcon />}
+    <div className="flex items-center justify-between gap-4 rounded-t-lg bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all duration-300 ease-in-out">
+      <span className="lowercase [&>span]:text-xs flex items-center gap-2">
+        <span className="inline-block w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+        {language}
+      </span>
+      <TooltipIconButton 
+        tooltip={isCopied ? "已复制" : "复制代码"} 
+        onClick={onCopy}
+        className="hover:bg-zinc-800 transition-colors duration-200"
+      >
+        {!isCopied && <CopyIcon className="transition-transform hover:scale-110" />}
+        {isCopied && <CheckIcon className="text-green-400 transition-all duration-300 ease-bounce" />}
       </TooltipIconButton>
     </div>
   );
-};
-
+}
 const useCopyToClipboard = ({
   copiedDuration = 3000,
 }: {

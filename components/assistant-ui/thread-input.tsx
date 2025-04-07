@@ -38,8 +38,9 @@ export const ThreadInput = () => {
     <>
       <button
         className={cn(
-          "my-2.5 size-8 p-2 transition-opacity ease-in",
-          "text-muted-foreground hover:bg-muted transition-colors"
+          "my-2.5 size-8 p-2 transition-all duration-200 ease-in-out",
+          "text-muted-foreground hover:bg-muted hover:text-primary hover:scale-105 active:scale-95",
+          "rounded-full focus:outline-none focus:ring-2 focus:ring-primary/30"
         )}
         onClick={toggleInputMode}
         aria-label={`Switch to ${
@@ -47,14 +48,16 @@ export const ThreadInput = () => {
         } input`}
         type="button"
       >
-        {inputMode === "text" ? <Mic size={18} /> : <Type size={18} />}
+        {inputMode === "text" ? 
+          <Mic size={18} className="transition-transform duration-200" /> : 
+          <Type size={18} className="transition-transform duration-200" />}
       </button>
 
       {inputMode === "text" ? (
         <ComposerPrimitive.Input ref={inputRef}
           rows={1}
           placeholder="输入你的疑问"
-          className="placeholder:text-muted-foreground flex-1 w-1 max-h-40 flex-grow resize-none border-none bg-transparent px-2 py-4 text-sm outline-none focus:ring-0 disabled:cursor-not-allowed"
+          className="placeholder:text-muted-foreground flex-1 w-1 max-h-40 flex-grow resize-none border-none bg-transparent px-3 py-4 text-sm outline-none focus:ring-0 disabled:cursor-not-allowed transition-all duration-200 ease-in-out focus:placeholder:text-primary/50"
         />
       ) : (
         <VoiceInput />
